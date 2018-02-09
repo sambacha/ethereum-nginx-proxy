@@ -2,7 +2,7 @@ FROM debian:jessie
 
 MAINTAINER Antoine Detante "antoine.detante@gmail.com"
 
-RUN apt-get update && apt-get install -y build-essential curl libssl-dev libluajit-5.1-dev libpcre3-dev zlib1g-dev
+RUN apt-get update && apt-get install -y build-essential curl libssl-dev libluajit-5.1-dev libpcre3-dev zlib1g-dev logrotate
 
 RUN mkdir /var/log/nginx
 
@@ -19,12 +19,13 @@ RUN cd /opt/src && tar xfz lua-cjson-2.1.0.tar.gz && cd lua-cjson-2.1.0 \
 
 RUN cd /opt/src && tar xfz nginx-1.11.7.tar.gz && tar xfz ngx_devel_kit-0.3.0.tar.gz && tar xfz lua-nginx-module-0.10.7.tar.gz
 
-RUN cd /opt/src/nginx-1.11.7 && ./configure --prefix=/opt/nginx --with-stream --with-ld-opt="-Wl,-rpath,/usr/local/lib" --add-module=/opt/src/ngx_devel_kit-0.3.0 --add-module=/opt/src/lua-nginx-module-0.10.7 --with-http_ssl_module \
+RUN cd /opt/src/nginx-1.11.7 && ./configure --prefix=/opt/nginx --with-ld-opt="-Wl,-rpath,/usr/local/lib" --add-module=/opt/src/ngx_devel_kit-0.3.0 --add-module=/opt/src/lua-nginx-module-0.10.7 --with-http_ssl_module \
   && make && make install \
   && rm /opt/src/*.tar.gz
 
 ADD nginx.conf /etc/nginx.conf
 ADD eth-jsonrpc-access.lua /opt/nginx/eth-jsonrpc-access.lua
+ADD nginx.logrotate /etc/logrotate.d/nginx
 
 EXPOSE 80 443
 
