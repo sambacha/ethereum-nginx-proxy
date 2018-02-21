@@ -26,6 +26,8 @@ RUN cd /opt/src/nginx-1.11.7 && ./configure --prefix=/opt/nginx --with-ld-opt="-
 ADD nginx.conf /etc/nginx.conf
 ADD eth-jsonrpc-access.lua /opt/nginx/eth-jsonrpc-access.lua
 ADD nginx.logrotate /etc/logrotate.d/nginx
+ADD nginx-ssl.crt /etc/ssl/certs/nginx-ssl.crt
+ADD nginx-ssl.key /etc/ssl/private/nginx-ssl.key
 
 EXPOSE 80 443
 
